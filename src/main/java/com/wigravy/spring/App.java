@@ -1,29 +1,27 @@
 package com.wigravy.spring;
 
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.webapp.WebAppContext;
 
+
+import java.net.URL;
+import java.security.ProtectionDomain;
 
 
 public class App {
-    public static void main(String[] args) {
-        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(ProductApplicationConfig.class);
-        ProductRepository productRepository = context.getBean("productRepository", ProductRepository.class);
-        Cart cart = context.getBean("cart", Cart.class);
-        Cart cart2 = context.getBean("cart", Cart.class);
-        cart.addProduct(1L);
-        cart.addProduct(2L);
-        cart.addProduct(3L);
-        cart.addProduct(3L);
-        cart.addProduct(3L);
-        cart.printProductList();
-        cart.removeProduct(3L);
-        cart.printProductList();
+    public static void main(String[] args) throws Exception {
+        Server server = new Server(8189);
 
-        cart2.addProduct(1L);
-        cart2.addProduct(1L);
-        cart2.printProductList();
+        ProtectionDomain domain = App.class.getProtectionDomain();
+        URL location = domain.getCodeSource().getLocation();
 
-        context.close();
+        WebAppContext webAppContext = new WebAppContext();
+        webAppContext.setContextPath("/app");
+        webAppContext.setWar(location.toExternalForm());
+
+        server.setHandler(webAppContext);
+        server.start();
+        server.join();
+
     }
-
 }

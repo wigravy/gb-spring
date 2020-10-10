@@ -15,11 +15,6 @@ public class ProductRepository {
     @PostConstruct
     public void init() {
         this.products = new ArrayList<>();
-        this.products.add(new Product(1L, "Milk", 4.99));
-        this.products.add(new Product(2L, "Meat", 9.99));
-        this.products.add(new Product(3L, "Pizza", 7.49));
-        this.products.add(new Product(4L, "Coca-Cola", 2.49));
-        this.products.add(new Product(5L, "Ice cream", 0.69));
     }
 
     public List<Product> getProductsList() {
