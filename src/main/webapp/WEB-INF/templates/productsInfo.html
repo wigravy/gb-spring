@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Products Info</title>
+    <style>
+        .vl {
+            padding: 5px;
+            border: 1px solid #4dc600;
+        }
+    </style>
+</head>
+<body>
+<h1>Products list</h1>
+<!--/*@thymesVar id="product" type="com.wigravy.spring.entity.Product"*/-->
+<form th:action="@{/addproduct}" th:object="${product}" method="post">
+    <span>Id: </span> <br/>
+    <input type="text" name="id" placeholder="Enter product id"> <br/>
+    <span>Name: </span> <br/>
+    <input type="text" name="name" placeholder="Enter product name"> <br/>
+    <span>Cost: </span> <br/>
+    <input type="text" name="cost" placeholder="Enter product cost"> <br/>
+    <input type="submit">
+</form>
+<table>
+    <thead>
+    <tr>
+        <td class="vl">id</td>
+        <td class="vl">Name</td>
+        <td class="vl">Cost</td>
+    </tr>
+    </thead>
+    <tbody>
+
+    <!--/*@thymesVar id="products" type="java.util.List<com.wigravy.spring.entity.Product>"*/-->
+    <tr th:each="product : ${products}">
+        <td class="vl" th:text="${product.getId()}"></td>
+        <td class="vl" th:text="${product.getName()}"></td>
+        <td class="vl" th:text="${product.getCost()}"></td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

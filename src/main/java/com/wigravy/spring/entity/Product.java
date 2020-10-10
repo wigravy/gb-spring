@@ -1,4 +1,4 @@
-package com.wigravy.spring;
+package com.wigravy.spring.entity;
 
 
 public class Product {
