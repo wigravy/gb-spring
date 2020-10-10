@@ -10,7 +10,7 @@ import java.security.ProtectionDomain;
 
 public class App {
     public static void main(String[] args) throws Exception {
-        Server server = new Server(8189);
+        Server server = new Server(9600);
 
         ProtectionDomain domain = App.class.getProtectionDomain();
         URL location = domain.getCodeSource().getLocation();
