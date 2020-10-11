@@ -26,11 +26,11 @@ public class ProductRepository {
         this.products.add(new Product(5L, "Ice cream", 0.69));
     }
 
-    public List<Product> getProductsList() {
+    public List<Product> getAll() {
         return Collections.unmodifiableList(products);
     }
 
-    public Product getProductById(Long id) {
+    public Product getById(Long id) {
         for (Product product : products) {
             if (product.getId().equals(id)) {
                 return product;
@@ -39,7 +39,7 @@ public class ProductRepository {
         throw new NullPointerException(String.format("Error: no such value exists [id = %d]", id));
     }
 
-    public void addProduct(Product product) {
+    public void add(Product product) {
         for (Product prod : products) {
             if (prod.getId().equals(product.getId())) {
                 throw new IllegalArgumentException(String.format("An element with this id(%d) already exists", product.getId()));

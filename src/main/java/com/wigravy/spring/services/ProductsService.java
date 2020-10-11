@@ -18,12 +18,12 @@ public class ProductsService {
         this.productRepository = productRepository;
     }
 
-    public List<Product> getAllProducts() {
-        return productRepository.getProductsList();
+    public List<Product> getAll() {
+        return productRepository.getAll();
     }
 
 
-    public void addProduct(Product product) {
-        productRepository.addProduct(product);
+    public void add(Product product) {
+        productRepository.add(product);
     }
 }
