@@ -1,29 +1,35 @@
 package com.wigravy.spring.services;
 
 
-import com.wigravy.spring.entity.Product;
-import com.wigravy.spring.repositories.ProductRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import com.wigravy.spring.database.DAO.DaoService;
+import com.wigravy.spring.database.entity.Product;
 
 import java.util.List;
 
-
-@Service
 public class ProductsService {
-    private ProductRepository productRepository;
+    private DaoService<Product> productDaoService = new DaoService<>();
 
-    @Autowired
-    public void setProductRepository(ProductRepository productRepository) {
-        this.productRepository = productRepository;
+    public Product findOneById(Long id) {
+        return productDaoService.findOneById(id);
     }
 
-    public List<Product> getAll() {
-        return productRepository.getAll();
+    public List<Product> findAll() {
+        return productDaoService.findAll();
     }
 
+    public Product save(Product product) {
+        return productDaoService.save(product);
+    }
 
-    public void add(Product product) {
-        productRepository.add(product);
+    public void deleteById(Long id) {
+        productDaoService.deleteById(id);
+    }
+
+    public void delete(Product product) {
+        productDaoService.delete(product);
+    }
+
+    public Product update(Product product) {
+        return productDaoService.update(product);
     }
 }

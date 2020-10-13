@@ -1,27 +1,17 @@
 package com.wigravy.spring;
 
-import org.eclipse.jetty.server.Server;
-import org.eclipse.jetty.webapp.WebAppContext;
 
-
-import java.net.URL;
-import java.security.ProtectionDomain;
-
+import com.wigravy.spring.database.entity.Customer;
+import com.wigravy.spring.database.entity.Product;
+import com.wigravy.spring.services.CustomerService;
+import com.wigravy.spring.services.ProductsService;
 
 public class App {
     public static void main(String[] args) throws Exception {
-        Server server = new Server(9600);
-
-        ProtectionDomain domain = App.class.getProtectionDomain();
-        URL location = domain.getCodeSource().getLocation();
-
-        WebAppContext webAppContext = new WebAppContext();
-        webAppContext.setContextPath("/app");
-        webAppContext.setWar(location.toExternalForm());
-
-        server.setHandler(webAppContext);
-        server.start();
-        server.join();
+//        ProductsService productsService = new ProductsService();
+//        productsService.save(new Product("Milk", 3.99));
+        CustomerService customerService = new CustomerService();
+        customerService.save(new Customer("Elena"));
 
     }
 }
