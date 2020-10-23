@@ -28,9 +28,4 @@ public class OrderItemService {
     public void delete(OrderItem orderItem) {
         orderItemDaoService.delete(orderItem);
     }
-
-    public OrderItem update(OrderItem orderItem) {
-        return orderItemDaoService.update(orderItem);
-    }
-
 }

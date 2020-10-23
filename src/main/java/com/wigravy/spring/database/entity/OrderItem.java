@@ -1,7 +1,6 @@
 package com.wigravy.spring.database.entity;
 
 import javax.persistence.*;
-import javax.transaction.Transactional;
 
 @Entity
 @Table(name = "order_item")
@@ -66,10 +65,10 @@ public class OrderItem {
     @Override
     public String toString() {
         return "OrderItem{" +
-                "id=" + id +
-                ", order=" + order +
-                ", product=" + product +
-                ", cost=" + cost +
+                "id = " + id +
+                ", order id = " + order.getId() +
+                ", product = " + product.getTitle() +
+                ", price at the time of purchase = " + cost +
                 '}';
     }
 }

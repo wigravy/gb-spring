@@ -2,17 +2,13 @@ package com.wigravy.spring.services;
 
 import com.wigravy.spring.database.DAO.DaoService;
 import com.wigravy.spring.database.entity.Order;
-import com.wigravy.spring.database.entity.Product;
+import com.wigravy.spring.database.entity.OrderItem;
 
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.util.List;
 
 public class OrderService {
     ProductService productService = new ProductService();
     CustomerService customerService = new CustomerService();
-
-
 
     DaoService<Order> orderDaoService = new DaoService<>(Order.class);
 
@@ -29,14 +25,15 @@ public class OrderService {
     }
 
     public void deleteById(Long id) {
-        orderDaoService.deleteById(id);
+        orderDaoService.delete(findOneById(id));
     }
 
     public void delete(Order order) {
+        OrderItemService orderItemService = new OrderItemService();
+        List<OrderItem> orderItems = order.getOrderItems();
+        for (OrderItem oi : orderItems) {
+            orderItemService.delete(oi);
+        }
         orderDaoService.delete(order);
-    }
-
-    public Order update(Order order) {
-        return orderDaoService.update(order);
     }
 }

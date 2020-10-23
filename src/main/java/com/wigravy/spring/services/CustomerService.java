@@ -1,12 +1,16 @@
 package com.wigravy.spring.services;
 
 import com.wigravy.spring.database.DAO.DaoService;
+import com.wigravy.spring.database.HibernateSessionFactory;
 import com.wigravy.spring.database.entity.Customer;
+import com.wigravy.spring.database.entity.Order;
+import com.wigravy.spring.database.entity.OrderItem;
+import org.hibernate.Session;
 
-import javax.transaction.Transactional;
+import java.io.ObjectInputStream;
 import java.util.List;
 
-@Transactional
+
 public class CustomerService {
     DaoService<Customer> customerDaoService = new DaoService<>(Customer.class);
 
@@ -23,14 +27,15 @@ public class CustomerService {
     }
 
     public void deleteById(Long id) {
-        customerDaoService.deleteById(id);
+        customerDaoService.delete(findOneById(id));
     }
 
     public void delete(Customer customer) {
+        OrderService orderService = new OrderService();
+        List<Order> orders = customer.getOrders();
+        for (Order o : orders) {
+            orderService.delete(o);
+        }
         customerDaoService.delete(customer);
-    }
-
-    public Customer update(Customer customer) {
-        return customerDaoService.update(customer);
     }
 }

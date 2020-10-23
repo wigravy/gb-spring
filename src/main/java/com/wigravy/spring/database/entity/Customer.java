@@ -1,12 +1,11 @@
 package com.wigravy.spring.database.entity;
 
 
-
-
+import com.wigravy.spring.database.HibernateSessionFactory;
+import org.hibernate.Session;
 import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
-import javax.transaction.Transactional;
 import java.util.List;
 
 @Entity
@@ -20,8 +19,8 @@ public class Customer {
     @Column
     private String name;
 
-    @OneToMany(mappedBy = "customer", fetch = FetchType.EAGER)
-    @Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE})
+    @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
+    @Cascade({org.hibernate.annotations.CascadeType.ALL})
     private List<Order> orders;
 
     public Customer() {
@@ -48,6 +47,19 @@ public class Customer {
     }
 
     public List<Order> getOrders() {
+        Query query = null;
+        List<Order> orders = null;
+        try (Session session = HibernateSessionFactory.getSession()) {
+            session.beginTransaction();
+            query = session.createQuery("from Order where customer = :customer");
+            query.setParameter("customer", this);
+            orders = query.getResultList();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if (orders == null) {
+            throw new NullPointerException(String.format("The customer[%s] has no orders", this));
+        }
         return orders;
     }
 
@@ -59,8 +71,8 @@ public class Customer {
     @Override
     public String toString() {
         return "Customer{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
+                "id = " + id +
+                ", name = '" + name + '\'' +
                 '}';
     }
 }

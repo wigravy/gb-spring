@@ -1,6 +1,8 @@
 package com.wigravy.spring.database.entity;
 
 
+import com.wigravy.spring.database.HibernateSessionFactory;
+import org.hibernate.Session;
 import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
@@ -57,6 +59,19 @@ public class Product {
     }
 
     public List<OrderItem> getOrderItems() {
+        Query query = null;
+        List<OrderItem> orderItems = null;
+        try (Session session = HibernateSessionFactory.getSession()) {
+            session.beginTransaction();
+            query = session.createQuery("from OrderItem where product = :product");
+            query.setParameter("product", this);
+            orderItems = query.getResultList();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if (orderItems == null) {
+            throw new NullPointerException("There are no products in the order yet");
+        }
         return orderItems;
     }
 
@@ -67,9 +82,9 @@ public class Product {
     @Override
     public String toString() {
         return "Product{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", cost=" + cost +
+                "id = " + id +
+                ", title = '" + title + '\'' +
+                ", cost = " + cost +
                 '}';
     }
 }
