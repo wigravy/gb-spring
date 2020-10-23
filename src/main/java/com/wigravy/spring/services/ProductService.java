@@ -40,14 +40,10 @@ public class ProductService {
         try (Session session = HibernateSessionFactory.getSession()) {
             session.beginTransaction();
             query = session.createQuery("select c from Customer c, Order o, OrderItem oi, Product p\n" +
-                    "where \n" +
-                    "c = o.customer\n" +
-                    "AND\n" +
-                    "o = oi.order\n" +
-                    "AND\n" +
-                    "p = oi.product\n" +
-                    "AND\n" +
-                    "p = :product");
+                    "where c = o.customer\n" +
+                    "AND o = oi.order\n" +
+                    "AND p = oi.product\n" +
+                    "AND p = :product");
             query.setParameter("product", product);
             customers = query.getResultList();
         } catch (Exception e) {

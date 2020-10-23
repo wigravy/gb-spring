@@ -10,6 +10,7 @@ import com.wigravy.spring.services.CustomerService;
 import com.wigravy.spring.services.OrderItemService;
 import com.wigravy.spring.services.OrderService;
 import com.wigravy.spring.services.ProductService;
+import org.w3c.dom.ls.LSOutput;
 
 import java.util.List;
 
@@ -77,13 +78,14 @@ public class App {
         orderItems.forEach(System.out::println);
 
 
-        System.out.println("\n\t\t=== Выводим список всех товаров, их стоимости на момент покупки, а так же заказов у покупателя с id 2 ===");
-        orders.stream().flatMap(o -> o.getOrderItems().stream()).forEachOrdered(System.out::println);
-
-
-        System.out.println("\n== Выбрать всех покупателей купивших продукт с id 5 ==\n");
+        System.out.println("\n\t\t=== Выбрать всех покупателей купивших продукт с id 5 ===");
         Product product1 = productService.findOneById(5L);
         List<Customer> customers = productService.findAllCustomersWhoBuyProduct(product1);
         customers.forEach(System.out::println);
+
+
+        System.out.println("\n\t\t=== Получить список всех купленных товаров с ценой на момент покупки у покупателя с id 2 ===");
+        List<OrderItem> products = customerService.getAllPurchasedProducts(customer);
+        products.forEach(System.out::println);
     }
 }

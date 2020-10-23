@@ -7,6 +7,7 @@ import com.wigravy.spring.database.entity.Order;
 import com.wigravy.spring.database.entity.OrderItem;
 import org.hibernate.Session;
 
+import javax.persistence.Query;
 import java.io.ObjectInputStream;
 import java.util.List;
 
@@ -37,5 +38,25 @@ public class CustomerService {
             orderService.delete(o);
         }
         customerDaoService.delete(customer);
+    }
+
+    public List<OrderItem> getAllPurchasedProducts(Customer customer) {
+        Query query = null;
+        List<OrderItem> products = null;
+        try (Session session = HibernateSessionFactory.getSession()) {
+            session.beginTransaction();
+            query = session.createQuery("select oi from Customer c, Order o, OrderItem oi\n" +
+                    "where c = o.customer\n" +
+                    "AND o = oi.order\n" +
+                    "AND c = :customer");
+            query.setParameter("customer", customer);
+            products = query.getResultList();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if (products == null) {
+            throw new NullPointerException("Nobody has bought this item yet");
+        }
+        return products;
     }
 }
