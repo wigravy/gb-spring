@@ -1,41 +1,40 @@
 package com.wigravy.spring.database.entity;
 
-import com.wigravy.spring.services.ProductsService;
+import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
+import javax.transaction.Transactional;
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.List;
 
 @Entity
-@Table(name = "order")
+@Table(name = "order_test")
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column
     private Long id;
 
+    @Column(name = "order_date")
+    private Timestamp date;
+
     @ManyToOne
-    @JoinColumn(name = "customer")
+    @JoinColumn(name = "customer_id", nullable = false)
     private Customer customer;
 
-    @ManyToOne
-    @JoinColumn(name = "product")
-    private Product product;
 
-    @Column
-    private Double cost;
+    @OneToMany(mappedBy = "order" , fetch = FetchType.EAGER)
+    @Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE})
+    private List<OrderItem> orderItems;
 
-    @Column
-    private Timestamp date;
 
     public Order() {
     }
 
-    public Order(Product product, Customer customer, Double cost, Timestamp date) {
-        this.customer = customer;
-        this.product = product;
-        this.cost = cost;
+    public Order(Timestamp date, Customer customer) {
         this.date = date;
+        this.customer = customer;
     }
 
     public Long getId() {
@@ -46,30 +45,6 @@ public class Order {
         this.id = id;
     }
 
-    public Customer getCustomer() {
-        return customer;
-    }
-
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
-    }
-
-    public Product getProduct() {
-        return product;
-    }
-
-    public void setProduct(Product product) {
-        this.product = product;
-    }
-
-    public Double getCost() {
-        return cost;
-    }
-
-    public void setCost(Double cost) {
-        this.cost = cost;
-    }
-
     public Date getDate() {
         return date;
     }
@@ -78,8 +53,31 @@ public class Order {
         this.date = date;
     }
 
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
+
+    public List<OrderItem> getOrderItems() {
+        return orderItems;
+    }
+
+    public void setOrderItems(List<OrderItem> orderItems) {
+        this.orderItems = orderItems;
+    }
+
     @Override
     public String toString() {
-        return String.format("Order #%d customer: %s, product: %s, date: %tc", id, customer.getName(), product.getName(), date);
+        return "Order{" +
+                "id=" + id +
+                ", date=" + date +
+                ", customer=" + customer +
+                '}';
     }
 }
+
+
+

@@ -6,8 +6,8 @@ import com.wigravy.spring.database.entity.Product;
 
 import java.util.List;
 
-public class ProductsService {
-    private DaoService<Product> productDaoService = new DaoService<>();
+public class ProductService {
+    private DaoService<Product> productDaoService = new DaoService<>(Product.class);
 
     public Product findOneById(Long id) {
         return productDaoService.findOneById(id);

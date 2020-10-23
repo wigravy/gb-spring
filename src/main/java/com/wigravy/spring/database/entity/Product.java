@@ -1,6 +1,8 @@
 package com.wigravy.spring.database.entity;
 
 
+import org.hibernate.annotations.Cascade;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -12,14 +14,15 @@ public class Product {
     @Column
     private Long id;
 
-    @Column
+    @Column(nullable = false)
     private String title;
 
-    @Column
+    @Column(nullable = false)
     private Double cost;
 
     @OneToMany(mappedBy = "product")
-    private List<Order> orders;
+    @Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE})
+    private List<OrderItem> orderItems;
 
     public Product() {
     }
@@ -37,12 +40,12 @@ public class Product {
         this.id = id;
     }
 
-    public String getName() {
+    public String getTitle() {
         return title;
     }
 
-    public void setName(String name) {
-        this.title = name;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public Double getCost() {
@@ -53,8 +56,20 @@ public class Product {
         this.cost = cost;
     }
 
+    public List<OrderItem> getOrderItems() {
+        return orderItems;
+    }
+
+    public void setOrderItems(List<OrderItem> orderItems) {
+        this.orderItems = orderItems;
+    }
+
     @Override
     public String toString() {
-        return String.format("Product: [id: %d, name: %s, cost: %f]", id, title, cost);
+        return "Product{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", cost=" + cost +
+                '}';
     }
 }

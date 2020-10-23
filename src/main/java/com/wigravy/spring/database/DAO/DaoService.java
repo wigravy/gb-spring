@@ -1,19 +1,24 @@
 package com.wigravy.spring.database.DAO;
 
 
+import com.wigravy.spring.database.HibernateSessionManager;
+import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import java.util.List;
 
 public class DaoService<T> {
+    SessionFactory sessionFactory = HibernateSessionManager.getInstance();
     Session session = null;
     private Class<T> clazz;
-    private SessionFactory sessionFactory = new Configuration().configure("hibernate.cfg.xml").buildSessionFactory();;
 
+
+    public DaoService(Class<T> clazz) {
+        this.clazz = clazz;
+    }
 
     public T findOneById(Long id) {
         T temp = null;
@@ -21,8 +26,13 @@ public class DaoService<T> {
             session = sessionFactory.getCurrentSession();
             session.beginTransaction();
             temp = session.get(clazz, id);
+            session.getTransaction().commit();
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            if (session != null) {
+                session.close();
+            }
         }
         return temp;
     }
@@ -38,6 +48,10 @@ public class DaoService<T> {
             session.getTransaction().commit();
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            if (session != null) {
+                session.close();
+            }
         }
         return temp;
     }
@@ -50,6 +64,10 @@ public class DaoService<T> {
             session.getTransaction().commit();
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            if (session != null) {
+                session.close();
+            }
         }
         return t;
     }
@@ -62,6 +80,10 @@ public class DaoService<T> {
             session.getTransaction().commit();
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            if (session != null) {
+                session.close();
+            }
         }
     }
 
@@ -72,6 +94,10 @@ public class DaoService<T> {
             session.getTransaction().commit();
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            if (session != null) {
+                session.close();
+            }
         }
     }
 
@@ -82,6 +108,10 @@ public class DaoService<T> {
             session.getTransaction().commit();
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            if (session != null) {
+                session.close();
+            }
         }
         return t;
     }

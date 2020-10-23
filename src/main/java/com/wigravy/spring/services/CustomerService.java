@@ -2,12 +2,13 @@ package com.wigravy.spring.services;
 
 import com.wigravy.spring.database.DAO.DaoService;
 import com.wigravy.spring.database.entity.Customer;
-import com.wigravy.spring.database.entity.Product;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
+@Transactional
 public class CustomerService {
-    DaoService<Customer> customerDaoService = new DaoService<>();
+    DaoService<Customer> customerDaoService = new DaoService<>(Customer.class);
 
     public Customer findOneById(Long id) {
         return customerDaoService.findOneById(id);

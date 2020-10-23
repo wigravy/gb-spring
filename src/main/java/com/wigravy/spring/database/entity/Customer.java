@@ -1,7 +1,12 @@
 package com.wigravy.spring.database.entity;
 
 
+
+
+import org.hibernate.annotations.Cascade;
+
 import javax.persistence.*;
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Entity
@@ -15,7 +20,8 @@ public class Customer {
     @Column
     private String name;
 
-    @OneToMany(mappedBy = "customer")
+    @OneToMany(mappedBy = "customer", fetch = FetchType.EAGER)
+    @Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE})
     private List<Order> orders;
 
     public Customer() {
@@ -41,8 +47,20 @@ public class Customer {
         this.name = name;
     }
 
+    public List<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(List<Order> orders) {
+        this.orders = orders;
+    }
+
+
     @Override
     public String toString() {
-        return String.format("Customer: [id: %d, name: %s]", id, name);
+        return "Customer{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
     }
 }
