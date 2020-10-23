@@ -18,7 +18,7 @@ public class ProductController {
         this.productsService = productsService;
     }
 
-    @GetMapping("/productinfo")
+    @GetMapping("/product_info")
     public String productInfo(Model model) {
         List<Product> products = productsService.getAll();
         model.addAttribute("products", products);
@@ -28,6 +28,6 @@ public class ProductController {
     @PostMapping("/addproduct")
     public String addProduct(@ModelAttribute Product product) {
         productsService.add(product);
-        return "redirect:/productinfo";
+        return "redirect:/product_info";
     }
 }
