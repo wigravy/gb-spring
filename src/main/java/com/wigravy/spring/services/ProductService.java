@@ -34,20 +34,28 @@ public class ProductService {
         productDaoService.delete(product);
     }
 
-//    public List<Customer> findAllCustomersWhoBuyProduct(Product product) {
-//        Query query = null;
-//        List<Customer> customers = null;
-//        try (Session session = HibernateSessionFactory.getSession()) {
-//            session.beginTransaction();
-//            query = session.createQuery("from Customer where id = ");
-//            query.setParameter("order", this);
-//            orderItems = query.getResultList();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        if (orderItems == null) {
-//            throw new NullPointerException("There are no products in the order yet");
-//        }
-//        return customers;
-//    }
+    public List<Customer> findAllCustomersWhoBuyProduct(Product product) {
+        Query query = null;
+        List<Customer> customers = null;
+        try (Session session = HibernateSessionFactory.getSession()) {
+            session.beginTransaction();
+            query = session.createQuery("select c from Customer c, Order o, OrderItem oi, Product p\n" +
+                    "where \n" +
+                    "c = o.customer\n" +
+                    "AND\n" +
+                    "o = oi.order\n" +
+                    "AND\n" +
+                    "p = oi.product\n" +
+                    "AND\n" +
+                    "p = :product");
+            query.setParameter("product", product);
+            customers = query.getResultList();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if (customers == null) {
+            throw new NullPointerException("Nobody has bought this item yet");
+        }
+        return customers;
+    }
 }

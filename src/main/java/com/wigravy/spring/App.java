@@ -20,13 +20,8 @@ public class App {
         CustomerService customerService = new CustomerService();
         OrderService orderService = new OrderService();
         OrderItemService orderItemService = new OrderItemService();
-        Order order = orderService.findOneById(4L);
-        Product product = productService.findOneById(1L);
-        Customer customer = customerService.findOneById(2L);
-        List<OrderItem> orderItems = order.getOrderItems();
-        List<Order> orders = customer.getOrders();
 
-        System.out.println("\n\t\t=== Добавляем нового покупателя ===");
+//        System.out.println("\n\t\t=== Добавляем нового покупателя ===");
 //        Customer customer1 = new Customer("Denis");
 //        customerService.save(customer1);
 //        System.out.println(customer1);
@@ -57,33 +52,38 @@ public class App {
 //        orderItemService.save(orderItem2);
 
 
-//        System.out.println("\n\t\t=== Выводим информацию о продукте с id 1 ===");
-//        System.out.println(product);//
-//
-//        System.out.println("\n\t\t=== Выводим информацию о покупателе с id 2 ===");
-//        System.out.println(customer);
-//
-//        System.out.println("\n\t\t=== Выводим информацию о заказе с id 5 ===");
-//        System.out.println(order);
-//
-//
-//        System.out.println("\n\t\t=== Выводим список заказов для покупателя с id 2 ===");
-//        for (Order o : orders) {
-//            System.out.println(o);
-//        }
-//
-//
-//        System.out.println("\n\t\t=== Выводим список товаров и их стоимость на момент покупки, в заказе с id 5 ===");
-//        for (OrderItem orderItem : orderItems) {
-//            System.out.println(orderItem);
-//        }
-//
-//
-//        System.out.println("\n\t\t=== Выводим список всех товаров, их стоимости на момент покупки, а так же заказов у покупателя с id 2 ===");
-//        for (Order o : orders) {
-//            for (OrderItem oi : o.getOrderItems()) {
-//                System.out.println(oi);
-//            }
-//        }
+        System.out.println("\n\t\t=== Выводим информацию о продукте с id 1 ===");
+        Product product = productService.findOneById(1L);
+        System.out.println(product);//
+
+
+        System.out.println("\n\t\t=== Выводим информацию о покупателе с id 2 ===");
+        Customer customer = customerService.findOneById(2L);
+        System.out.println(customer);
+
+
+        System.out.println("\n\t\t=== Выводим список заказов для покупателя с id 2 ===");
+        List<Order> orders = customer.getOrders();
+        orders.forEach(System.out::println);
+
+
+        System.out.println("\n\t\t=== Выводим информацию о заказе с id 5 ===");
+        Order order = orderService.findOneById(5L);
+        System.out.println(order);
+
+
+        System.out.println("\n\t\t=== Выводим список товаров и их стоимость на момент покупки, в заказе с id 5 ===");
+        List<OrderItem> orderItems = order.getOrderItems();
+        orderItems.forEach(System.out::println);
+
+
+        System.out.println("\n\t\t=== Выводим список всех товаров, их стоимости на момент покупки, а так же заказов у покупателя с id 2 ===");
+        orders.stream().flatMap(o -> o.getOrderItems().stream()).forEachOrdered(System.out::println);
+
+
+        System.out.println("\n== Выбрать всех покупателей купивших продукт с id 5 ==\n");
+        Product product1 = productService.findOneById(5L);
+        List<Customer> customers = productService.findAllCustomersWhoBuyProduct(product1);
+        customers.forEach(System.out::println);
     }
 }
