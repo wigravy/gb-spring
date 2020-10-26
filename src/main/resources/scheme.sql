@@ -1,17 +1,6 @@
--- скрипт создания таблиц
 
-CREATE TABLE products.orders
-(
-    id bigint NOT NULL DEFAULT nextval('products.order_id_seq'::regclass),
-    customer_id bigint NOT NULL,
-    order_date timestamp with time zone NOT NULL,
-    CONSTRAINT order_pkey PRIMARY KEY (id),
-    CONSTRAINT customer_id_fk FOREIGN KEY (customer_id)
-        REFERENCES products.customer (id) MATCH SIMPLE
-        ON UPDATE NO ACTION
-        ON DELETE NO ACTION
-        NOT VALID
-)
+
+    -- !    скрипт создания таблиц  ! --
 
 CREATE TABLE products.product
 (
@@ -21,28 +10,32 @@ CREATE TABLE products.product
     CONSTRAINT product_pkey PRIMARY KEY (id)
 )
 
-CREATE TABLE products.order_item
-(
-    id bigint NOT NULL DEFAULT nextval('products.order_item_id_seq'::regclass),
-    order_id bigint NOT NULL,
-    product_id bigint NOT NULL,
-    cost numeric NOT NULL,
-    CONSTRAINT order_item_pkey PRIMARY KEY (id),
-    CONSTRAINT order_id_fk FOREIGN KEY (order_id)
-        REFERENCES products.orders (id) MATCH SIMPLE
-        ON UPDATE NO ACTION
-        ON DELETE NO ACTION
-        NOT VALID,
-    CONSTRAINT product_id_fk FOREIGN KEY (product_id)
-        REFERENCES products.product (id) MATCH SIMPLE
-        ON UPDATE NO ACTION
-        ON DELETE NO ACTION
-        NOT VALID
-)
 
-CREATE TABLE products.customer
-(
-    id bigint NOT NULL DEFAULT nextval('products.customer_id_seq'::regclass),
-    name character varying COLLATE pg_catalog."default" NOT NULL,
-    CONSTRAINT customer_pkey PRIMARY KEY (id)
-)
+CREATE INDEX product_name
+    ON products.product USING btree
+    (title COLLATE pg_catalog."default" ASC NULLS LAST)
+    TABLESPACE pg_default;
+
+    -- !  Тестовые данные  ! --
+
+insert into products.product (title, cost) values
+('pear', 1.85),
+('melon', 3.70),
+('cherry', 5.00),
+('peach', 2.77),
+('apricot', 2.20),
+('shrimp', 12.00),
+('bagel', 0.50),
+('potatoes', 6.00),
+('chocolate', 10.25),
+('corn', 0.70),
+('gum', 1.40),
+('soda', 3.99),
+('milk', 1.85),
+('apple', 3.70),
+('orange', 5.00),
+('coconut', 6.79),
+('meat', 9.40),
+('rice', 2.60),
+('nuts', 6.50),
+('perch', 6.00);
