@@ -1,16 +1,11 @@
 package com.wigravy.spring;
 
 
-import com.wigravy.spring.model.Product;
-import com.wigravy.spring.services.ProductService;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.webapp.WebAppContext;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import java.net.URL;
 import java.security.ProtectionDomain;
-import java.util.List;
 
 
 public class App {
