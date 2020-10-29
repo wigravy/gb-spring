@@ -39,7 +39,6 @@
         <mapping class="com.wigravy.spring.database.entity.Product"/>
         <mapping class="com.wigravy.spring.database.entity.Customer"/>
         <mapping class="com.wigravy.spring.database.entity.Order"/>
-        <mapping class="com.wigravy.spring.database.entity.OrderItem"/>
 
     </session-factory>
 </hibernate-configuration>

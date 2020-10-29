@@ -8,16 +8,13 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import java.util.List;
 
-public class DaoService<T> {
+public class DefaultDao<T> {
     Session session = null;
-    private Class<T> clazz;
 
-
-    public DaoService(Class<T> clazz) {
-        this.clazz = clazz;
+    public DefaultDao() {
     }
 
-    public T findOneById(Long id) {
+    public T findOneById(Long id, Class<T> clazz) {
         T temp = null;
         try {
             session = HibernateSessionFactory.getSession();
@@ -34,7 +31,7 @@ public class DaoService<T> {
         return temp;
     }
 
-    public List<T> findAll() {
+    public List<T> findAll(Class<T> clazz) {
         List<T> temp = null;
         try {
             session = HibernateSessionFactory.getSession();
@@ -69,7 +66,7 @@ public class DaoService<T> {
         return t;
     }
 
-    public void deleteById(Long id) {
+    public void deleteById(Long id, Class<T> clazz) {
         try {
             session = HibernateSessionFactory.getSession();
             session.beginTransaction();
@@ -83,7 +80,6 @@ public class DaoService<T> {
             }
         }
     }
-
 
     public void delete(T t) {
         try {

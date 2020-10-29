@@ -1,57 +1,42 @@
 package com.wigravy.spring.services;
 
 
-import com.wigravy.spring.database.DAO.DaoService;
-import com.wigravy.spring.database.HibernateSessionFactory;
+import com.wigravy.spring.database.DAO.ProductDao;
 import com.wigravy.spring.database.entity.Customer;
-import com.wigravy.spring.database.entity.OrderItem;
+import com.wigravy.spring.database.entity.Order;
 import com.wigravy.spring.database.entity.Product;
-import org.hibernate.Session;
 
-import javax.persistence.Query;
 import java.util.List;
 
 public class ProductService {
-    private DaoService<Product> productDaoService = new DaoService<>(Product.class);
+    private ProductDao productDaoService = new ProductDao();
 
     public Product findOneById(Long id) {
-        return productDaoService.findOneById(id);
+        return productDaoService.findOneById(id, Product.class);
     }
 
     public List<Product> findAll() {
-        return productDaoService.findAll();
+        return productDaoService.findAll(Product.class);
     }
 
-    public Product save(Product product) {
-        return productDaoService.save(product);
+    public void save(Product product) {
+        productDaoService.save(product);
     }
 
     public void deleteById(Long id) {
-        productDaoService.deleteById(id);
+        productDaoService.deleteById(id, Product.class);
     }
 
     public void delete(Product product) {
         productDaoService.delete(product);
     }
 
-    public List<Customer> findAllCustomersWhoBuyProduct(Product product) {
-        Query query = null;
-        List<Customer> customers = null;
-        try (Session session = HibernateSessionFactory.getSession()) {
-            session.beginTransaction();
-            query = session.createQuery("select c from Customer c, Order o, OrderItem oi, Product p\n" +
-                    "where c = o.customer\n" +
-                    "AND o = oi.order\n" +
-                    "AND p = oi.product\n" +
-                    "AND p = :product");
-            query.setParameter("product", product);
-            customers = query.getResultList();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        if (customers == null) {
-            throw new NullPointerException("Nobody has bought this item yet");
-        }
-        return customers;
+    public List<Order> getOrders(Product product) {
+        return productDaoService.getOrders(product);
+    }
+
+
+    public List<Customer> findAllUniqueCustomersWhoBuyProduct(Product product) {
+        return productDaoService.findAllUniqueCustomersWhoBuyProduct(product);
     }
 }

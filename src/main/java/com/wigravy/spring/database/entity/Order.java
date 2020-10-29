@@ -1,13 +1,8 @@
 package com.wigravy.spring.database.entity;
 
-import com.wigravy.spring.database.HibernateSessionFactory;
-import org.hibernate.Session;
-import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
-import java.util.Date;
-import java.util.List;
 
 @Entity
 @Table(name = "orders")
@@ -17,25 +12,33 @@ public class Order {
     @Column
     private Long id;
 
-    @Column(name = "order_date")
-    private Timestamp date;
-
     @ManyToOne
     @JoinColumn(name = "customer_id", nullable = false)
     private Customer customer;
 
 
-    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
-    @Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE})
-    private List<OrderItem> orderItems;
+   @ManyToOne
+   @JoinColumn(name = "product_id", nullable = false)
+    private Product product;
 
+    @Column(name = "order_date")
+    private Timestamp date;
+
+   @Column
+   private Double price;
+
+    @Column
+    private Long amount;
 
     public Order() {
     }
 
-    public Order(Timestamp date, Customer customer) {
-        this.date = date;
+    public Order(Customer customer, Product product, Timestamp date, Double price, Long amount) {
         this.customer = customer;
+        this.product = product;
+        this.date = date;
+        this.price = price;
+        this.amount = amount;
     }
 
     public Long getId() {
@@ -46,7 +49,7 @@ public class Order {
         this.id = id;
     }
 
-    public Date getDate() {
+    public Timestamp getDate() {
         return date;
     }
 
@@ -62,33 +65,39 @@ public class Order {
         this.customer = customer;
     }
 
-    public List<OrderItem> getOrderItems() {
-        Query query = null;
-        List<OrderItem> orderItems = null;
-        try (Session session = HibernateSessionFactory.getSession()) {
-            session.beginTransaction();
-            query = session.createQuery("from OrderItem where order = :order");
-            query.setParameter("order", this);
-            orderItems = query.getResultList();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        if (orderItems == null) {
-            throw new NullPointerException("There are no products in the order yet");
-        }
-        return orderItems;
+    public Product getProduct() {
+        return product;
     }
 
-    public void setOrderItems(List<OrderItem> orderItems) {
-        this.orderItems = orderItems;
+    public void setProduct(Product product) {
+        this.product = product;
+    }
+
+    public Long getAmount() {
+        return amount;
+    }
+
+    public void setAmount(Long amount) {
+        this.amount = amount;
+    }
+
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
     }
 
     @Override
     public String toString() {
         return "Order{" +
-                "id = " + id +
-                ", date = " + date +
-                ", customer = " + customer.getName() +
+                "id=" + id +
+                ", date=" + date +
+                ", customer=" + customer +
+                ", product=" + product +
+                ", price=" + price +
+                ", amount=" + amount +
                 '}';
     }
 }
