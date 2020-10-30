@@ -1,8 +1,10 @@
 package com.wigravy.spring.controllers;
 
 import com.wigravy.spring.model.Product;
+import com.wigravy.spring.repositories.specification.ProductSpecification;
 import com.wigravy.spring.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,12 +25,20 @@ public class ProductController {
     }
 
     @GetMapping
-    public String showProductByPage(Model model, @RequestParam(name = "page", defaultValue = "1") Integer pageNumber) {
-        if (pageNumber < 1) {
-            pageNumber = 1;
+    public String showProductByPage(Model model,
+                                    @RequestParam(name = "page", defaultValue = "1") Integer pageNumber,
+                                    @RequestParam(name = "min_cost", required = false) Double minCost,
+                                    @RequestParam(name = "max_cost", required = false) Double maxCost) {
+
+        Specification<Product> specification = Specification.where(null);
+        if (minCost != null) {
+            specification = specification.and(ProductSpecification.costGreaterOrEqualThan(minCost));
+        }
+        if (maxCost != null) {
+            specification = specification.and(ProductSpecification.costLessOrEqualThan(maxCost));
         }
 
-        List<Product> products = productService.findByPage(pageNumber - 1, 5).getContent();
+        List<Product> products = productService.findAll(specification, pageNumber).getContent();
         model.addAttribute("products", products);
         return "all_products";
     }
@@ -40,14 +50,4 @@ public class ProductController {
     public Product infoByTitle(@RequestParam String title) {
         return productService.findByTitle(title);
     }
-
-
-    // Пример:      http://localhost:8189/app/products/find_all_by_min_cost?cost=2.99
-    @GetMapping("/find_all_by_min_cost")
-    @ResponseBody
-    public List<Product> findProductsByMinCost(@RequestParam Double cost) {
-        return productService.findByMinCost(cost);
-    }
-
-
 }
