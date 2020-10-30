@@ -30,10 +30,6 @@ public class ProductService {
         return productRepository.findOneByTitle(title);
     }
 
-    public Page<Product> findByPage(int pageNumber, int pageSize) {
-        return productRepository.findAll(PageRequest.of(pageNumber, pageSize));
-    }
-
     public List<Product> findAll() {
         return productRepository.findAll();
     }

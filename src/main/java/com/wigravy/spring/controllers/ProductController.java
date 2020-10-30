@@ -37,7 +37,6 @@ public class ProductController {
         if (maxCost != null) {
             specification = specification.and(ProductSpecification.costLessOrEqualThan(maxCost));
         }
-
         List<Product> products = productService.findAll(specification, pageNumber).getContent();
         model.addAttribute("products", products);
         return "all_products";
